@@ -19,7 +19,7 @@ The last two components in the hash are the identities of A and B, which we assu
 strings.
 
 In this implementation the group G is a finite cyclic subgroup of the NIST FIPS PUB 186-4 elliptic
-curves over Prime Fields y^2 = x^3 - 3x + b (mod p) P-224, P-256, P-384, P-521.
+curves over Prime Fields y^2 = x^3 - 3x + b (mod p) P-224, P-256, P-384, P-521. 
 H1 = H2 = SHA3 in order to generate keys of 224, 256, 384 and 512 bits respectively.
 
 SHA3 functions are taken directly from the KeccaK Team official repository:
@@ -58,6 +58,7 @@ The functions called directly by this code are:
 * SHA3_512
 
 ## How to
+The package implements the following functions to implement the Naxos Key Exchange Protocol:
 
 * selectCurve: selects the NIST curve and the length of the key
 * privateKey: calculates the private key from the secret key
