@@ -57,6 +57,16 @@ The functions called directly by this code are:
 * KeccakWidth1600_Sponge
 * SHA3_512
 
+They corresponds to the following more generic ones in the standalone package in
+https://github.com/gvanas/KeccakCodePackage/tree/master/Standalone/CompactFIPS202/C :
+
+* FIPS202_SHA3_224
+* FIPS202_SHA3_256
+* FIPS202_SHA3_384
+* Keccak
+* FIPS202_SHA3_512
+
+
 ## How to
 The package implements the following functions to implement the Naxos Key Exchange Protocol:
 
@@ -66,6 +76,8 @@ The package implements the following functions to implement the Naxos Key Exchan
 * calculateXY: calculates X=g^H1(eskA,skA)
 * calculateKa: calculates the key for user A
 * calculateKb: calculates the key for user B
+
+Replace the above mentioned Keccak functions with the 
 
 ## Example
 
