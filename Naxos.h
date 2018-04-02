@@ -60,7 +60,7 @@ int selectCurve(ellipticCurve* curve,int index);
 int generateRand(keyC num,ellipticCurve* curve);
 /* It generates non cryptographic secure random numbers mod p */
 
-int  privateKey(keyC pkx,keyC pky,keyC sk,ellipticCurve* curveN);
+void  privateKey(keyC pkx,keyC pky,keyC sk,ellipticCurve* curveN);
 /* It calculates the private key pkx, pky from the secret key sk
    pk = G*sk
 */
@@ -68,7 +68,7 @@ int  privateKey(keyC pkx,keyC pky,keyC sk,ellipticCurve* curveN);
 int randomGen(uint8_t* esk,int nbits);
 /* It generates a random number of nbits using the /dev/urandom device */
 
-int calculateXY(keyC Xx,keyC Xy,keyC esk,keyC sk,ellipticCurve* curveN);
+void calculateXY(keyC Xx,keyC Xy,keyC esk,keyC sk,ellipticCurve* curveN);
 /* It generates esk and calculates X=G*H(esk,sk), using the proper SHA3 function */
 
 int calculateKa(keyC kA,keyC Yx,keyC Yy,keyC eskA,keyC skAb, keyC pkBx, keyC pkBy,keyC idA,keyC idB,ellipticCurve* curveN);
