@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "Naxos.h"
+#include <string.h>
 
 
 void printW64(uint64_t word64)
@@ -180,6 +181,8 @@ int main()
           break;
       }
 
+    if (indexC==NIST_P521) nBytes=64;                            // we provide a key of 512 bits instead
+
     sendToMate("kA:   ",kA,nBytes);
 
     end = clock();
@@ -223,8 +226,6 @@ int main()
           break;
       }
 
-    if (indexC==NIST_P521) nBytes=64;                            // we provide a key of 512 bits instead
-
     sendToMate("kB:   ",kB,nBytes);
 
     end = clock();
@@ -253,7 +254,3 @@ int main()
 
   return 1;
 }
-
-// Todo clear all the buffers with memset(string, 0, numOfBytes);
-//        or more general for an arr[n],  memset(arr,0, n*sizeof(arr[0]));
-// Todo Improve efficiency with memcpy: for arr1[n], memcpy(arr1,arr2,n*sizeof(arr1[0])
