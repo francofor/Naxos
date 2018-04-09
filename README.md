@@ -75,11 +75,11 @@ https://github.com/gvanas/KeccakCodePackage/tree/master/Standalone/CompactFIPS20
 The package implements the following functions to implement the Naxos Key Exchange Protocol:
 
 * selectCurve: selects the NIST curve and the length of the key
-* privateKey: calculates the private key from the secret key pkA=g*skA and pkB=g*skB
+* privateKey: calculates the private key from the secret key pkA=g`*`skA and pkB=g`*`skB
 * randomGen: generates random numbers based on unix-like /dev/urandom device (used in calculateXY)
-* calculateXY: calculates X=g*H(eskA,skA) and Y=g*H(eskB,skB)
-* calculateKa: calculates the key for user A Ka=H(Y*skA, pkB*H(eskA,skA), Y*H(eskA,skA), A, B)
-* calculateKb: calculates the key for user B Kb=H(pkA*H(eskB,skB), X*skB, X*H(eskB,skB), A, B)
+* calculateXY: calculates X=g`*`H(eskA,skA) and Y=g`*`H(eskB,skB)
+* calculateKa: calculates the key for user A Ka=H(Y`*`skA, pkB`*`H(eskA,skA), Y`*`H(eskA,skA), A, B)
+* calculateKb: calculates the key for user B Kb=H(pkA`*`H(eskB,skB), X`*`skB, X`*`H(eskB,skB), A, B)
 
 ## Example
 
