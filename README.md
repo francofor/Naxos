@@ -4,7 +4,7 @@ This project implements the Naxos authenticated key exchange (AKE) Protocol:
 Stronger Security of Authenticated Key Exchange - Authors: Brian LaMacchia, Kristin Lauter and Anton Mityagin
 
 The NAXOS AKE protocol uses a mathematical group G and two hash functions, H1: {0,1}* -> Zq
-and H2: {0,1}* -> {0, 1}λ  (for some constant λ). A long-term secret key of a party A is an exponent
+and H2: {0,1}* -> {0, 1}<sup>λ</sup> (for some constant λ). A long-term secret key of a party A is an exponent
 skA ~~C~~ Zq, and the corresponding long-term public key of A is the power pkA = g^skA ~~C~~ G. In the
 following description of an AKE session of NAXOS executed between the parties A and B we
 assume that each party knows the other’s public key and that public keys are in the group G.
