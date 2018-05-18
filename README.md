@@ -1,5 +1,16 @@
 # Naxos Key Exchange
 
+## Contents
+1. [Project description](#project-description)
+2. [Architecture](#architecture)
+3. [Features](#features)
+4. [How to run](#how-to-run)
+5. [Basic usage](#basic-usage)
+6. [Development notes](#development-notes)
+7. [References](#references)
+8. [License](#license)
+
+
 # Project description
 
 This project implements the Naxos authenticated key exchange (AKE) Protocol:
@@ -29,6 +40,10 @@ Ka = Kb = H2(g<sup>H1(eskB,skB)skA</sup>, g<sup>H1(eskA,skA)skB</sup>, g<sup>H1(
 
 The last two components in the hash are the identities of A and B, which we assume to be binary
 strings.
+
+# Architecture
+
+![Architecture](architecture.png)
 
 # Features
 
@@ -175,9 +190,6 @@ curves.
 Due to that, this implementation works fine with any new elliptic curve over a prime p of
 224, 256, 385 or 521 bits which points satisfy the equation: y<sup>2</sup> = x<sup>3</sup> - 3x + b (mod p).
 
-# Architecture
-
-![Architecture](architecture.png)
 
 # References
 
