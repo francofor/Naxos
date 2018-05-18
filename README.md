@@ -122,11 +122,11 @@ https://github.com/gvanas/KeccakCodePackage/tree/master/Standalone/CompactFIPS20
 All numbers in the key exchange functions are represented in arrays of chars.
 
 * selectCurve: selects the NIST curve and the length of the key
-* privateKey: calculates the private key pk from the secret key sk: pkA=g`*`skA and pkB=g`*`skB
+* privateKey: calculates the private key pk from the secret key sk: pkA=g*skA and pkB=g*skB
 * randomGen: generates random numbers based on unix-like /dev/urandom device (used in calculateXY)
-* calculateXY: calculates X=g`*`H(eskA,skA) and Y=g`*`H(eskB,skB)
-* calculateKa: calculates the key for user A Ka=H(Y`*`skA, pkB`*`H(eskA,skA), Y`*`H(eskA,skA), A, B)
-* calculateKb: calculates the key for user B Kb=H(pkA`*`H(eskB,skB), X`*`skB, X`*`H(eskB,skB), A, B)
+* calculateXY: calculates X=g*H(eskA,skA) and Y=g*H(eskB,skB)
+* calculateKa: calculates the key for user A Ka=H(Y*skA, pkB*H(eskA,skA), Y*H(eskA,skA), A, B)
+* calculateKb: calculates the key for user B Kb=H(pkA*H(eskB,skB), X*skB, X*H(eskB,skB), A, B)
 
 # How to run
 
@@ -147,19 +147,19 @@ In real life they are usually based on user/password schema.
 Then it is simulated the key exchange according to the following steps:
 
 1. A calculates the public key pkA.
-2. A generate the ephemeral key and calculates X=g`*`H(eskA,skA)
+2. A generate the ephemeral key and calculates X=g*H(eskA,skA)
 3. A sends to B the identity IdA, pkA (in real life they are usually already note to B) and X.
 The sending is simulated by a printout in the console.
 4. B receives IdA, pkA and X.
 5. B checks that pkA and X are on the curve, otherwise there is an error.
 6. B calculates the public key pkB.
-7. B generates the ephemeral key and calculates Y`*`H(eskA,skA), A, B)
+7. B generates the ephemeral key and calculates Y*H(eskA,skA), A, B)
 8. B sends to A the identity IdB, pkB (in real life they are usually already note to A) and Y.
 The sending is simulated by a printout in the console.
 9. A checks that pkB and Y are on the curve, otherwise there is an error.
-10. A calculates Ka=H(Y`*`skA, pkB`*`H(eskA,skA), Y`*`H(eskA,skA), IdA, IdB). If there is no error (the point is on the curve) it can star using it.
+10. A calculates Ka=H(Y*skA, pkB*H(eskA,skA), Y*H(eskA,skA), IdA, IdB). If there is no error (the point is on the curve) it can star using it.
 11. In the example Ka is printed in the console.
-12. B calculates Kb=H(pkA`*`H(eskB,skB), X`*`skB, X`*`H(eskB,skB), IdA, IdB). If there is no error (the point is on the curve) it can star using it.
+12. B calculates Kb=H(pkA*H(eskB,skB), X*skB, X*H(eskB,skB), IdA, IdB). If there is no error (the point is on the curve) it can star using it.
 13. In the example Kb is printed in the console.
 
 # Basic usage
