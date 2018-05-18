@@ -26,17 +26,13 @@ eskB at random from {0,1}<sup>λ</sup>. Then the parties exchange values X=g<sup
 Y=g<sup>H1(eskB,skB)</sup>, check if received values are in the group G and only compute the session
 keys if the check succeeds. 
 
-Party A computes the session key Ka as:
+Party A computes the session key Ka as: H2(Y<sup>skA</sup>, pkB<sup>H1(eskA,skA)</sup>, Y<sup>H1(eskA,skA)</sup>, A, B),
 
-H2(Y<sup>skA</sup>, pkB<sup>H1(eskA,skA)</sup>, Y<sup>H1(eskA,skA)</sup>, A, B),
-
-and party B computes the session key Kb as:
-
-H2(pkA<sup>H1(eskB,skB)</sup>, X<sup>skB</sup>, H1(eskB,skB)</sup>, A, B).
+and party B computes the session key Kb as: H2(pkA<sup>H1(eskB,skB)</sup>, X<sup>skB</sup>, H1(eskB,skB)</sup>, A, B).
 
 It can be easily checked that:
 
-Ka = Kb = H2(g<sup>H1(eskB,skB)skA</sup>, g<sup>H1(eskA,skA)skB</sup>, g<sup>H1(eskA,skA)H1(eskB,skB)</sup>, A, B).
+`Ka = Kb = H2(g<sup>H1(eskB,skB)skA</sup>, g<sup>H1(eskA,skA)skB</sup>, g<sup>H1(eskA,skA)H1(eskB,skB)</sup>, A, B)`.
 
 The last two components in the hash are the identities of A and B, which we assume to be binary
 strings.
