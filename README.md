@@ -1,16 +1,5 @@
 # Naxos Key Exchange
 
-## Table of Contents
-1.[Project description](Project)
-2. [Features](#Features)
-3. [How to run](How)
-4. [Basic usage](Basic)
-5. [Development notes](Development)
-6. [Architecture](Architecture)
-7. [References](References)
-8. [License](License)
-
-
 # Project description
 
 This project implements the Naxos authenticated key exchange (AKE) Protocol:
