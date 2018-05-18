@@ -16,8 +16,8 @@
 This project implements the Naxos authenticated key exchange (AKE) Protocol:
 Stronger Security of Authenticated Key Exchange - Authors: Brian LaMacchia, Kristin Lauter and Anton Mityagin
 
-The NAXOS AKE protocol uses a mathematical group G and two hash functions, H1: {0,1}* -> Zq
-and H2: {0,1}* -> {0,1}<sup>λ</sup> (for some constant λ). A long-term secret key of a party A is an exponent
+The NAXOS AKE protocol uses a mathematical group G and two hash functions, H1: {0,1}\* -> Zq
+and H2: {0,1}\* -> {0,1}<sup>λ</sup> (for some constant λ). A long-term secret key of a party A is an exponent
 skA ~~C~~ Zq, and the corresponding long-term public key of A is the power pkA = g<sup>skA</sup> ~~C~~ G. 
 In the following description of an AKE session of NAXOS executed between the parties A and B we
 assume that each party knows the other’s public key and that public keys are in the group G. 
@@ -86,9 +86,8 @@ The main function provided is the scalar multiplication of an integer modulo p w
 P over the elliptic curve. 
 It operates over integer numbers in internal representation format of arrays of 64 bits words. 
 The points are represented by Affine coordinates (x,y), but all the internal operations
-are for the algorithm are based on the Projective coordinates (X : Y : Z) where:
-
-x = X/Z<sup>2</sup> and y = Y/Z<sup>3</sup>
+are for the algorithm are based on the Projective coordinates (X : Y : Z) where
+x = X/Z<sup>2</sup> and y = Y/Z<sup>3</sup>.
 
 The implemented algorithm is a co-Z efficient version of the Montgomery ladder, and therefore all
 the needed single operations for this algorithm are provided.
@@ -122,11 +121,11 @@ https://github.com/gvanas/KeccakCodePackage/tree/master/Standalone/CompactFIPS20
 All numbers in the key exchange functions are represented in arrays of chars.
 
 * selectCurve: selects the NIST curve and the length of the key
-* privateKey: calculates the private key pk from the secret key sk: pkA=g*skA and pkB=g*skB
+* privateKey: calculates the private key pk from the secret key sk: pkA=g\*skA and pkB=g\*skB
 * randomGen: generates random numbers based on unix-like /dev/urandom device (used in calculateXY)
-* calculateXY: calculates X=g*H(eskA,skA) and Y=g*H(eskB,skB)
-* calculateKa: calculates the key for user A Ka=H(Y*skA, pkB*H(eskA,skA), Y*H(eskA,skA), A, B)
-* calculateKb: calculates the key for user B Kb=H(pkA*H(eskB,skB), X*skB, X*H(eskB,skB), A, B)
+* calculateXY: calculates X=g\*H(eskA,skA) and Y=g\*H(eskB,skB)
+* calculateKa: calculates the key for user A Ka=H(Y\*skA, pkB\*H(eskA,skA), Y\*H(eskA,skA), A, B)
+* calculateKb: calculates the key for user B Kb=H(pkA\*H(eskB,skB), X\*skB, X\*H(eskB,skB), A, B)
 
 # How to run
 
@@ -147,19 +146,19 @@ In real life they are usually based on user/password schema.
 Then it is simulated the key exchange according to the following steps:
 
 1. A calculates the public key pkA.
-2. A generate the ephemeral key and calculates X=g*H(eskA,skA)
+2. A generate the ephemeral key and calculates X=g\*H(eskA,skA)
 3. A sends to B the identity IdA, pkA (in real life they are usually already note to B) and X.
 The sending is simulated by a printout in the console.
 4. B receives IdA, pkA and X.
 5. B checks that pkA and X are on the curve, otherwise there is an error.
 6. B calculates the public key pkB.
-7. B generates the ephemeral key and calculates Y*H(eskA,skA), A, B)
+7. B generates the ephemeral key and calculates Y\*H(eskA,skA), A, B)
 8. B sends to A the identity IdB, pkB (in real life they are usually already note to A) and Y.
 The sending is simulated by a printout in the console.
 9. A checks that pkB and Y are on the curve, otherwise there is an error.
-10. A calculates Ka=H(Y*skA, pkB*H(eskA,skA), Y*H(eskA,skA), IdA, IdB). If there is no error (the point is on the curve) it can star using it.
+10. A calculates Ka=H(Y\*skA, pkB\*H(eskA,skA), Y\*H(eskA,skA), IdA, IdB). If there is no error (the point is on the curve) it can star using it.
 11. In the example Ka is printed in the console.
-12. B calculates Kb=H(pkA*H(eskB,skB), X*skB, X*H(eskB,skB), IdA, IdB). If there is no error (the point is on the curve) it can star using it.
+12. B calculates Kb=H(pkA\*H(eskB,skB), X\*skB, X\*H(eskB,skB), IdA, IdB). If there is no error (the point is on the curve) it can star using it.
 13. In the example Kb is printed in the console.
 
 # Basic usage
