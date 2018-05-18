@@ -2,7 +2,7 @@
 
 ## Table of Contents
 1.[Project description](Project)
-2. [Features](Features)
+2. [Features](#Features)
 3. [How to run](How)
 4. [Basic usage](Basic)
 5. [Development notes](Development)
