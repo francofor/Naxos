@@ -60,8 +60,8 @@ int selectCurve(ellipticCurve* curve,int index);
 int generateRand(keyC num,ellipticCurve* curve);
 /* It generates non cryptographic secure random numbers mod p */
 
-void  privateKey(keyC pkx,keyC pky,keyC sk,ellipticCurve* curveN);
-/* It calculates the private key pkx, pky from the secret key sk
+void  publicKey(keyC pkx,keyC pky,keyC sk,ellipticCurve* curveN);
+/* It calculates the public key pkx, pky from the secret key sk
    pk = G*sk
 */
 
