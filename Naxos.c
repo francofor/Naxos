@@ -986,8 +986,8 @@ int randomGen(uint8_t* esk,int nbits)
   return 1;
 }
 
-void privateKey(keyC pkx,keyC pky,keyC sk,ellipticCurve* curveN)
-/* It returns the private key pk from the secret key sk
+void publicKey(keyC pkx,keyC pky,keyC sk,ellipticCurve* curveN)
+/* It returns the public key pk from the secret key sk
    pk = G*sk
 */
 {
