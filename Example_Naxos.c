@@ -92,7 +92,7 @@ int main()
     generateRand(idA,&curveN);                // Generate idA using the rand function. To be used only for demo.
     generateRand(skA,&curveN);                // Generate skA using the rand function. To be used only for demo.
     // Check that skA != 0
-    privateKey(pkAx,pkAy,skA,&curveN);        // Calculate pkA from skA
+    publicKey(pkAx,pkAy,skA,&curveN);        // Calculate pkA from skA
 
     // Phase 1A
     //   Generate eskA and calculate X=G*H(eskA,skA).
@@ -123,7 +123,7 @@ int main()
     //   and we calculate pkB = G*skB.
     generateRand(idB,&curveN);                // Generate idB using the rand function. To be used only for demo.
     generateRand(skB,&curveN);                // Generate skB using the rand function. To be used only for demo.
-    privateKey(pkBx,pkBy,skB,&curveN);        // Calculate pkB from skB
+    publicKey(pkBx,pkBy,skB,&curveN);        // Calculate pkB from skB
 
     // Phase 1B
     //   Generate eskB and calculate Y=G*H(eskB,skB).
