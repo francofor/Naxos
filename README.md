@@ -131,6 +131,25 @@ All numbers in the key exchange functions are represented in arrays of chars.
 
 ## How to build it
 
+Download the SHA3 routines from the Keccak Team official repository:
+https://github.com/gvanas/KeccakCodePackage
+
+Run "make FIPS202-opt64.pack" to get a tarball with the sources needed
+to compile the FIPS 202 functions generically optimized for 64-bit platforms.
+
+The functions called directly by this code are:
+
+* SHA3_224
+* SHA3_256
+* SHA3_384
+* KeccakWidth1600_Sponge
+* SHA3_512
+
+Other equivalent SHA3 routines can be used from the Keccak Team official repository,
+either more generic or optimnizec for other platforms.
+In such a case take care to replace the call to the above functions to the equivalent
+routines in the code.
+
 Compile the code with any C compiler.
 
 The tested code has been built with GCC.
