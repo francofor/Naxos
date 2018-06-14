@@ -1,12 +1,13 @@
-//
-// References:
-// [1] Guide to Elliptic Curve Cryptography - Authors: Hankerson, Darrel, Menezes, Alfred J., Vanstone, Scott
-//
-// [2] Co-Z Addition Formulæ and Binary Ladders on Elliptic Curves
-//
-// [3] FIPS PUB 186-4, Digital Signature Standard (DSS)
-//
-// Testing: http://point-at-infinity.org/ecc/nisttv
+/*
+   References:
+   [1] Guide to Elliptic Curve Cryptography - Authors: Hankerson, Darrel, Menezes, Alfred J., Vanstone, Scott
+  
+   [2] Co-Z Addition Formulæ and Binary Ladders on Elliptic Curves
+  
+   [3] FIPS PUB 186-4, Digital Signature Standard (DSS)
+  
+   Testing: http://point-at-infinity.org/ecc/nisttv
+*/
 
 #ifndef _NAXOS__
 #define _NAXOS__
@@ -16,35 +17,35 @@
 #include <sys/random.h>
 #include <SimpleFIPS202.h>
 
-#define COORD_NWORDS 10   // It is the maximum curve.wsize + 1
-#define COORD_BYTES  72   // Is is the maximum curve.wsize*BITS8
+#define COORD_NWORDS 10   /* It is the maximum curve.wsize + 1   */
+#define COORD_BYTES  72   /* Is is the maximum curve.wsize*BITS8 */
 
-#define NIST_P192 192    // Index for NIST curve P-192
-#define NIST_P224 224    // Index for NIST curve P-224
-#define NIST_P256 256    // Index for NIST curve P-256
-#define NIST_P384 384    // Index for NIST curve P-384
-#define NIST_P521 521    // Index for NIST curve P-521
+#define NIST_P192 192     /* Index for NIST curve P-192          */
+#define NIST_P224 224     /* Index for NIST curve P-224          */
+#define NIST_P256 256     /* Index for NIST curve P-256          */
+#define NIST_P384 384     /* Index for NIST curve P-384          */
+#define NIST_P521 521     /* Index for NIST curve P-521          */
 
 
 typedef uint64_t coord[COORD_NWORDS];
 
-typedef struct pointA    // Point with Affine coordinates
+typedef struct pointA     /* Point with Affine coordinates       */
 {
   coord aX;
   coord aY;
 } pointA;
 
-typedef struct ellipticCurve // Elliptic curve of type: y^2 = x^3 -ax + b mod p.
+typedef struct ellipticCurve /* Elliptic curve of type: y^2 = x^3 -ax + b mod p. */
 {
-  uint16_t bsize;            // number of bits
-  uint16_t wsize;            // number of words
+  uint16_t bsize;            /* number of bits                   */
+  uint16_t wsize;            /* number of words                  */
   coord a;
   coord b;
   coord p;
-  pointA g;                  // base point
+  pointA g;                  /* base point                       */
 } ellipticCurve;
 
-typedef uint8_t keyC[COORD_BYTES]; // Coordinate X or Y of a point on the curve in byte array format
+typedef uint8_t keyC[COORD_BYTES]; /* Coordinate X or Y of a point on the curve in byte array format */
 
 int selectCurve(ellipticCurve* curve,int index);
 /* It selects the elliptic curve among the ones recommended by NIST
@@ -95,4 +96,4 @@ int calculateKb(keyC kB,keyC pkAx, keyC pkAy,keyC eskB,keyC skBb,keyC Xx,keyC Xy
      -5 = internal error
 */
 
-#endif // #ifndef _NAXOS__
+#endif /* #ifndef _NAXOS__  */
