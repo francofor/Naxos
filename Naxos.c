@@ -896,7 +896,7 @@ int generateRand(keyC num,ellipticCurve* curve)
 {
   int i,r,res,inputByteLen;
   keyC msg;
-  coord h;
+  coord h,h2;
   uint64_t t,t1;
 
   inputByteLen=(curve->bsize+7)/8;
@@ -922,7 +922,6 @@ int generateRand(keyC num,ellipticCurve* curve)
 
   	case NIST_P521:
   		res = KeccakWidth1600_Sponge(576, 1024, msg, inputByteLen, 0x06, num, 528/8);
-  		num[65] = num[65]&1; /* NIST_521 has only 1 bit in byte[65] */
   		break;
 
      default:
@@ -936,28 +935,39 @@ int generateRand(keyC num,ellipticCurve* curve)
 
   if (coordCmp(h,curve->p,curve->wsize)==0)  /* if h = p then error                          */
 	return -1;
-  if (coordCmp(h,curve->p,curve->wsize)!=-1) /* if h > p then h = h - p                      */
+
+  if (curve->bsize == NIST_P521) /* num[65] is only one bit, therefore NIST P-521 modular reduction is used */
   {
-    r = 0;                                   /* initialize carry bit                         */
-    for (i=0;i<curve->wsize;i++)
-    {
-      t1 = h[i]-r;                           /* calculates h - carry bit                     */
-      r = t1 > h[i];                         /* carry bit                                    */
-      t = t1 - curve->p[i];                  /* now subtract p                               */
-      r = r | (t > t1);                      /* calculate the result carry bit of the 2 subs */
-      h[i] = t;
-    }
+	  coordInit(h2);
+	  h2[0] = h[8]>>9;
+	  h[8] = h[8] & 0x000001FF;
+	  coordAdd(h,h,h2,curve->p,curve->wsize);
   }
   else
   {
-    r = 0;                                   /* initialize carry bit                         */
-    for (i=0;i<curve->wsize;i++)
+    if (coordCmp(h,curve->p,curve->wsize)!=-1) /* if h > p then h = h - p                      */
     {
-      t1 = msg[i]-r;                         /* calculates msg - carry bit                   */
-      r = t1 > msg[i];                       /* carry bit                                    */
-      t = t1 - curve->p[i];                  /* now subtract p                               */
-      r = r | (t > t1);                      /* calculate the result carry bit of the 2 subs */
-      msg[i] = t;
+      r = 0;                                   /* initialize carry bit                         */
+      for (i=0;i<curve->wsize;i++)
+      {
+        t1 = h[i]-r;                           /* calculates h - carry bit                     */
+        r = t1 > h[i];                         /* carry bit                                    */
+        t = t1 - curve->p[i];                  /* now subtract p                               */
+        r = r | (t > t1);                      /* calculate the result carry bit of the 2 subs */
+        h[i] = t;
+      }
+    }
+    else
+    {
+      r = 0;                                   /* initialize carry bit                         */
+      for (i=0;i<curve->wsize;i++)
+      {
+        t1 = msg[i]-r;                         /* calculates msg - carry bit                   */
+        r = t1 > msg[i];                       /* carry bit                                    */
+        t = t1 - curve->p[i];                  /* now subtract p                               */
+        r = r | (t > t1);                      /* calculate the result carry bit of the 2 subs */
+        msg[i] = t;
+      }
     }
   }
 
@@ -986,7 +996,7 @@ int randomGen(uint8_t* esk,int nbits)
   return 1;
 }
 
-void publicKey(keyC pkx,keyC pky,keyC sk,ellipticCurve* curveN)
+int publicKey(keyC pkx,keyC pky,keyC sk,ellipticCurve* curveN)
 /* It returns the public key pk from the secret key sk
    pk = G*sk
 */
@@ -995,9 +1005,12 @@ void publicKey(keyC pkx,keyC pky,keyC sk,ellipticCurve* curveN)
   pointA t2;
   int byteLen;
 
+
   byteLen = (curveN->bsize+7)/8;
 
   byteToWord(t1,sk,byteLen);                /* Convert sk to t in coord format             */
+  if (coordIsZero(t1,curveN->wsize)==1) return -1;            /* sk = 0, return error     */
+  if (coordCmp(t1,curveN->p,curveN->wsize) != -1) return -2;  /* sk >= p, return error    */
   scalarMult(&t2,t1,&curveN->g,curveN->a,curveN->p,curveN->wsize); /* t2 = G*sk            */
   wordToByte(pkx,t2.aX,curveN->wsize);      /* Convert coord x of t2 in byte array format  */
   wordToByte(pky,t2.aY,curveN->wsize);      /* Convert coord y of t2 in byte array format  */
@@ -1005,6 +1018,7 @@ void publicKey(keyC pkx,keyC pky,keyC sk,ellipticCurve* curveN)
   coordInit(t1);                            /* Clear t1                                    */
   coordInit(t2.aX);                         /* Clear t2.aX                                 */
   coordInit(t2.aY);                         /* Clear t2.aY                                 */
+  return 0;
 }
 
 int hashAndMod(coord h,keyC esk,keyC sk,ellipticCurve* curveN)
@@ -1014,7 +1028,7 @@ int hashAndMod(coord h,keyC esk,keyC sk,ellipticCurve* curveN)
   uint8_t msg[DOUBLEW_BYTES];
   keyC hashed;
   uint64_t t,t1;
-  coord h1;
+  coord h1,h2;
 
   inputByteLen = (curveN->bsize+7)/8;
 
@@ -1042,7 +1056,6 @@ int hashAndMod(coord h,keyC esk,keyC sk,ellipticCurve* curveN)
 
   	case NIST_P521:
   		res = KeccakWidth1600_Sponge(576, 1024, msg, inputByteLen, 0x06, hashed, 528/8);
-  		hashed[65] = hashed[65]&1; /* NIST_521 has only 1 bit in byte[65] */
   		break;
 
     default:
@@ -1058,31 +1071,40 @@ int hashAndMod(coord h,keyC esk,keyC sk,ellipticCurve* curveN)
 
   byteToWord(h,hashed,inputByteLen);         /* Convert hashed to h in coord format               */
 
-  if (coordCmp(h,curveN->p,curveN->wsize)==1)/* if h > p then h = h - p                           */
+  if (curveN->bsize == NIST_P521) /* num[65] is only one bit, therefore NIST P-521 modular reduction is used */
   {
-    r = 0;                                   /* initialize carry bit                              */
-    for (i=0;i<curveN->wsize;i++)
+	  coordInit(h2);
+	  h2[0] = h[8]>>9;
+	  h[8] = h[8] & 0x000001FF;
+	  coordAdd(h,h,h2,curveN->p,curveN->wsize);
+  }
+  else
+  {
+    if (coordCmp(h,curveN->p,curveN->wsize)==1)/* if h > p then h = h - p                           */
     {
-      t1 = h[i]-r;                           /* calculates h - carry bit                           */
-      r = t1 > h[i];                         /* carry bit                                          */
-      t = t1 - curveN->p[i];                 /* now subtract p                                     */
-      r = r | (t > t1);                      /* calculate the result carry bit of the 2 subs       */
-      h[i] = t;
+      r = 0;                                   /* initialize carry bit                              */
+      for (i=0;i<curveN->wsize;i++)
+      {
+        t1 = h[i]-r;                           /* calculates h - carry bit                           */
+        r = t1 > h[i];                         /* carry bit                                          */
+        t = t1 - curveN->p[i];                 /* now subtract p                                     */
+        r = r | (t > t1);                      /* calculate the result carry bit of the 2 subs       */
+        h[i] = t;
+      }
+    }
+    else                                       /* In order to maintain the same number of operations */
+    {
+      r = 0;                                   /* initialize carry bit                               */
+      for (i=0;i<curveN->wsize;i++)
+      {
+        t1 = h1[i]-r;                          /* calculates h1 - carry bit                          */
+        r = t1 > h[i];                         /* carry bit                                          */
+        t = t1 - curveN->p[i];                 /* now subtract p                                     */
+        r = r | (t > t1);                      /* calculate the result carry bit of the 2 subs       */
+        h1[i] = t;
+      }
     }
   }
-  else                                       /* In order to maintain the same number of operations */
-  {
-    r = 0;                                   /* initialize carry bit                               */
-    for (i=0;i<curveN->wsize;i++)
-    {
-      t1 = h1[i]-r;                          /* calculates h1 - carry bit                          */
-      r = t1 > h[i];                         /* carry bit                                          */
-      t = t1 - curveN->p[i];                 /* now subtract p                                     */
-      r = r | (t > t1);                      /* calculate the result carry bit of the 2 subs       */
-      h1[i] = t;
-    }
-  }
-
   memset(hashed,0,COORD_BYTES);              /* Clear hashed                                       */
 
   return 1;
@@ -1103,7 +1125,7 @@ void calculateXY(keyC Xx,keyC Xy,keyC esk,keyC sk,ellipticCurve* curveN)
   {
     randomGen(esk,curveN->bsize);              /* Generate eskB using an entropy source     */
     hashAndMod(h,esk,sk,curveN);               /* Calculate h = H(esk,sk)                   */
- } while (1 == coordIsZero(h,curveN->wsize));  /* h must be different than 0                */
+  } while (1 == coordIsZero(h,curveN->wsize)); /* h must be different than 0                */
 
   scalarMult(&X,h,&curveN->g,curveN->a,curveN->p,curveN->wsize); /* X = G*h = G*H(esk,sk)   */
   wordToByte(Xx,X.aX,curveN->wsize);           /* Convert coord x of X in byte array format */
@@ -1309,10 +1331,10 @@ int calculateKb(keyC kB,keyC pkAx, keyC pkAy,keyC eskB,keyC skBb,keyC Xx,keyC Xy
   coordInit(t3B.aY);                   /* clear t3B.aY             */
   coordInit(skB);                      /* clear skB                */
   coordInit(hB);                       /* clear hB                 */
-  
+
+
   if (res==1)
     return -1;
 
   return 1;
 }
-
