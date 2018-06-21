@@ -15,7 +15,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <sys/random.h>
-#include <SimpleFIPS202.h>
+#include "FIPS202-opt64/SimpleFIPS202.h"
 
 #define COORD_NWORDS 10   /* It is the maximum curve.wsize + 1   */
 #define COORD_BYTES  72   /* Is is the maximum curve.wsize*BITS8 */
@@ -61,7 +61,7 @@ int selectCurve(ellipticCurve* curve,int index);
 int generateRand(keyC num,ellipticCurve* curve);
 /* It generates non cryptographic secure random numbers mod p */
 
-void  publicKey(keyC pkx,keyC pky,keyC sk,ellipticCurve* curveN);
+int  publicKey(keyC pkx,keyC pky,keyC sk,ellipticCurve* curveN);
 /* It calculates the public key pkx, pky from the secret key sk
    pk = G*sk
 */
