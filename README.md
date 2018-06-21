@@ -137,6 +137,8 @@ https://github.com/gvanas/KeccakCodePackage
 Run "make FIPS202-opt64.pack" to get a tarball with the sources needed
 to compile the FIPS 202 functions generically optimized for 64-bit platforms.
 
+Unzip the files in the FIPS202-opt64 folder in the naxos source file folder.
+
 The functions called directly by this code are:
 
 * SHA3_224
@@ -150,7 +152,7 @@ either more generic or optimnizec for other platforms.
 In such a case take care to replace the call to the above functions to the equivalent
 routines in the code.
 
-Compile the code with any C compiler.
+Run "make" to compile the Example_naxos.
 
 The tested code has been built with GCC.
 
@@ -164,21 +166,19 @@ In real life they are usually based on user/password schema.
 
 Then it is simulated the key exchange according to the following steps:
 
-1. A calculates the public key pkA.
-2. A generate the ephemeral key and calculates X=g\*H(eskA,skA)
-3. A sends to B the identity IdA, pkA (in real life they are usually already note to B) and X.
-The sending is simulated by a printout in the console.
-4. B receives IdA, pkA and X.
-5. B checks that pkA and X are on the curve, otherwise there is an error.
-6. B calculates the public key pkB.
-7. B generates the ephemeral key and calculates Y\*H(eskA,skA), A, B)
-8. B sends to A the identity IdB, pkB (in real life they are usually already note to A) and Y.
-The sending is simulated by a printout in the console.
-9. A checks that pkB and Y are on the curve, otherwise there is an error.
-10. A calculates Ka=H(Y\*skA, pkB\*H(eskA,skA), Y\*H(eskA,skA), IdA, IdB). If there is no error (the point is on the curve) it can star using it.
-11. In the example Ka is printed in the console.
-12. B calculates Kb=H(pkA\*H(eskB,skB), X\*skB, X\*H(eskB,skB), IdA, IdB). If there is no error (the point is on the curve) it can star using it.
-13. In the example Kb is printed in the console.
+0. pkA and pkB are calculated from skA and skB respectively.
+   PKI distributes identities, secret and public keys.
+1. A generate the ephemeral key and calculates X=g\*H(eskA,skA)
+2. A sends X to B.
+3. B receives X and checks that pkA and X are on the curve, otherwise there is an error.
+4. B generates the ephemeral key and calculates Y\*H(eskA,skA), IdA, IdB)
+5. B sends Y to A.
+6. A checks that pkB and Y are on the curve, otherwise there is an error.
+7. A calculates Ka=H(Y\*skA, pkB\*H(eskA,skA), Y\*H(eskA,skA), IdA, IdB). If there is no error (the point is on the curve) it can start using it.
+8. B calculates Kb=H(pkA\*H(eskB,skB), X\*skB, X\*H(eskB,skB), IdA, IdB). If there is no error (the point is on the curve) it can start using it.
+
+The sending of identities and keys is simulated by a printout in the console.
+Ka and Kb are printed in the console and compared to verify that there are no errors.
 
 # Basic usage
 
@@ -195,6 +195,9 @@ and to modify coherently the arithmetic functions.
 
 For the generation of the ephemeral keys it is made use of the unix-like getrandom
 function to get entropy from the /dev/urandom device. 
+In some linux versions the getrandom function is not avaliable and a routine is needed to
+get entropy directly from the /dev/urandom device.
+
 It shall be substituted by analogue functions in other OSs (for instance by BCryptGenRandom
 in windows).
 
